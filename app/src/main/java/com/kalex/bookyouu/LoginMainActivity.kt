@@ -38,15 +38,17 @@ class LoginMainActivity : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
     }
+
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) .
         val currentUser = auth.currentUser
-        if (currentUser != null){
+        if (currentUser != null) {
             //TODO: add the logic to select the user type
             auth.currentUser?.email
         }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_login)
         return navController.navigateUp(appBarConfiguration)

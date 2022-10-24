@@ -1,6 +1,5 @@
 package com.kalex.bookyouu.login.view
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
+import com.google.firebase.auth.FirebaseAuth
 import com.kalex.bookyouu.AdminActivity
 import com.kalex.bookyouu.R
 import com.kalex.bookyouu.databinding.LoginScreenFragmentBinding
@@ -25,7 +25,7 @@ class LoginFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    private lateinit var auth: FirebaseAuth
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,28 +36,28 @@ class LoginFragment : Fragment() {
 
     }
 
-    @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding){
+        with(binding) {
 
             setErrorListener(binding)
             loginButton.setOnClickListener {
                 var emailIsValid = emailTextInput.editText?.isEmailValid() ?: false
-                var passwordValid = passwordTextInput.editText?.isPasswordEmpy() ?:false
-                if (emailIsValid  &&  passwordValid){
+                var passwordValid = passwordTextInput.editText?.isPasswordEmpy() ?: false
+                if (emailIsValid && passwordValid) {
                     val sendIntent = Intent(activity, AdminActivity::class.java)
                     activity?.startActivity(sendIntent)
                     activity?.finish()
-                }else{
+                } else {
                     emailTextInput.error = resources.getString(R.string.login_credentials_error)
-                    passwordTextInput.error =  resources.getString(R.string.login_credentials_error)
+                    passwordTextInput.error = resources.getString(R.string.login_credentials_error)
                 }
             }
 
         }
     }
-    private fun setErrorListener(binding : LoginScreenFragmentBinding){
+
+    private fun setErrorListener(binding: LoginScreenFragmentBinding) {
         binding.emailTextInput.editText?.doOnTextChanged { text, start, before, count ->
             binding.emailTextInput.error = null
         }
@@ -65,6 +65,7 @@ class LoginFragment : Fragment() {
             binding.passwordTextInput.error = null
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
